@@ -14,16 +14,13 @@ const localStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const MongoStore = require('connect-mongo');
-const port = process.env.PORT || 8080;
-
-const dbURL = process.env.MONGODB_URL;
 
 // Load Routes
 const campgroundRoutes = require('./routes/campground');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/users');
 
-// const dbURL = 'mongodb://127.0.0.1:27017/yelpCampDB';
+const dbURL = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/yelpCampDB';
 // Establish Connection with MongoDB 
 mongoose.connect(dbURL)
     .then(() => {
@@ -60,10 +57,11 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }))
 
+const secret = process.env.SECRET || 'secret-key';
 // Set Express to use Session
 app.use(session({
     name: 'session',
-    secret: 'secret-key',
+    secret: secret,
     store: MongoStore.create({
         mongoUrl: dbURL,
         touchAfter: 24 * 60 * 60
@@ -102,9 +100,10 @@ app.get('/fakeUser', async (req, res) => {
     res.send(newUser);
 })
 
+const port = process.env.PORT || 3000;
 // Listen for Incoming Requests
 app.listen(port, () => {
-    console.log('LISTENING ON PORT 3000!');
+    console.log(`LISTENING ON PORT ${port}!`);
 })
 
 // Home Route
