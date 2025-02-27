@@ -16,14 +16,14 @@ const mongoSanitize = require('express-mongo-sanitize');
 const MongoStore = require('connect-mongo');
 const port = process.env.PORT || 8080;
 
-// const dbURL = process.env.MONGODB_URL; -> Should only be used in production mode
+const dbURL = process.env.MONGODB_URL;
 
 // Load Routes
 const campgroundRoutes = require('./routes/campground');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/users');
 
-const dbURL = 'mongodb://127.0.0.1:27017/yelpCampDB';
+// const dbURL = 'mongodb://127.0.0.1:27017/yelpCampDB';
 // Establish Connection with MongoDB 
 mongoose.connect(dbURL)
     .then(() => {
